@@ -524,18 +524,48 @@ static void draw(struct widget *w)
 	if (!count)
 		return;
 
+	size_t i;
+	struct taskbar_task *t;
+	int pinnedtw = 0;
+	int pinnedc = 0;
+
+	// First calculate the pinned task width
+	for (i = 0; i < tw->tasks_n; ++i) {
+		t = &tw->tasks[i];
+
+		if ( t->pinned ) {
+			int state = (t->win == tw->active) << 1;
+			int state_hl = state | (i == tw->highlighted);
+			struct triple_image *tbt;
+			if (tw->theme.states[state_hl].exists) {
+				tbt = &tw->theme.states[state_hl].background;
+			} else {
+				tbt = &tw->theme.states[state].background;
+			}
+
+			int leftw = image_width(tbt->left);
+			int rightw = image_width(tbt->right);
+
+			t->w = leftw + image_width(tw->theme.default_icon) + rightw;
+
+			pinnedtw += t->w;
+			pinnedc++;
+		}
+	}
+
 	int sepspace = (count-1) * image_width(tw->theme.separator);
-	int taskw = (w->width - sepspace) / count;
+
+	// To calculate the default task width we don't take account the pinned tabs width
+	int taskw = (w->width - sepspace - pinnedtw) / ( count - pinnedc );
 	if (tw->theme.task_max_width && taskw > tw->theme.task_max_width)
 		taskw = tw->theme.task_max_width;
 
 	int x = w->x;
 	int ttaskw;
 	int curtask = 0;
-	size_t i;
 
 	for (i = 0; i < tw->tasks_n; ++i) {
-		struct taskbar_task *t = &tw->tasks[i];
+		t = &tw->tasks[i];
 
 		if (!is_task_visible(w, t))
 			continue;
@@ -545,24 +575,14 @@ static void draw(struct widget *w)
 		if (TASKS_NEED_CORRECTION && curtask == count-1)
 			taskw = (w->x + w->width) - x;
 
+		if (tw->theme.task_max_width && taskw > tw->theme.task_max_width)
+			taskw = tw->theme.task_max_width;
+
 		ttaskw = taskw;
 
-		int state = (t->win == tw->active) << 1;
-		int state_hl = state | (i == tw->highlighted);
-		struct taskbar_theme *theme = &tw->theme;
-		struct triple_image *tbt;
-		if (theme->states[state_hl].exists) {
-			tbt = &theme->states[state_hl].background;
-		} else {
-			tbt = &theme->states[state].background;
-		}
-
-		int leftw = image_width(tbt->left);
-		int rightw = image_width(tbt->right);
-
-		if ( t->pinned )
-		{
-			taskw = leftw + image_width(tw->theme.default_icon) + rightw;
+		// Recover the previously calculated pin width
+		if ( t->pinned ) {
+			taskw = t->w;
 		}
 
 		/* save position for other events */
