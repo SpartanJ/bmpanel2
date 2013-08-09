@@ -285,7 +285,7 @@ static void parse_bmpanel2_args(int argc, char **argv)
 int main(int argc, char **argv)
 {
 	setlocale(LC_TIME, "");
-	g_thread_init(0);
+
 	if (!g_thread_supported())
 		XDIE("bmpanel2 requires glib with thread support enabled");
 	parse_bmpanel2_args(argc, argv);

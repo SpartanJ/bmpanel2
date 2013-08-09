@@ -567,15 +567,77 @@ static void free_custom_surface_data(void *ptr)
 	free_static_buf(ptr);
 }
 
-static cairo_surface_t *get_icon_from_netwm(long *data)
+int get_icon_count (long *data, int num)
+{
+	int count, pos, w, h;
+
+	count = 0;
+	pos = 0;
+	while (pos+2 < num) {
+		w = data[pos++];
+		h = data[pos++];
+		pos += w * h;
+		if (pos > num || w <= 0 || h <= 0) break;
+		count++;
+	}
+
+	return count;
+}
+
+long *get_best_icon (long *data, int icon_count, int num, int *iw, int *ih, int best_icon_size)
+{
+	int width[icon_count], height[icon_count], pos, i, w, h;
+	long *icon_data[icon_count];
+
+	/* List up icons */
+	pos = 0;
+	i = icon_count;
+	while (i--) {
+		w = data[pos++];
+		h = data[pos++];
+		if (pos + w * h > num) break;
+
+		width[i] = w;
+		height[i] = h;
+		icon_data[i] = &data[pos];
+
+		pos += w * h;
+	}
+
+	/* Try to find exact size */
+	int icon_num = -1;
+	for (i = 0; i < icon_count; i++) {
+		if (width[i] == best_icon_size) {
+			icon_num = i;
+			break;
+		}
+	}
+
+	/* Take the biggest or whatever */
+	if (icon_num < 0) {
+		int highest = 0;
+		for (i = 0; i < icon_count; i++) {
+			if (width[i] > highest) {
+					icon_num = i;
+					highest = width[i];
+			}
+		}
+	}
+
+	*iw = width[icon_num];
+	*ih = height[icon_num];
+	return icon_data[icon_num];
+}
+
+static cairo_surface_t *get_icon_from_netwm(long *data,int num,int icon_width)
 {
 	cairo_surface_t *ret = 0;
 	uint32_t *array = 0;
-	uint32_t w,h,size,i;
-	long *locdata = data;
+	int w,h;
+	uint32_t size,i;
 
-	w = *locdata++;
-	h = *locdata++;
+	long *locdata=get_best_icon (data, get_icon_count (data, num), num, &w, &h, icon_width);
+
 	size = w * h;
 
 	/* convert netwm icon format to cairo data */
@@ -677,9 +739,8 @@ cairo_surface_t *get_window_icon(struct x_connection *c, Window win,
 	long *data = x_get_prop_data(c, win, c->atoms[XATOM_NET_WM_ICON],
 			XA_CARDINAL, &num);
 
-	/* TODO: look for best sized icon? */
 	if (data) {
-		ret = get_icon_from_netwm(data);
+		ret = get_icon_from_netwm(data,num,image_width(default_icon));
 		XFree(data);
 	}
 
@@ -725,7 +786,11 @@ cairo_surface_t *copy_resized(cairo_surface_t *source, int w, int h)
 	       "Failed to create cairo context");
 
 	cairo_scale(cr, dw / ow, dh / oh);
+
 	cairo_set_source_surface(cr, source, 0, 0);
+
+	cairo_pattern_set_filter( cairo_get_source(cr), CAIRO_FILTER_BEST );
+
 	cairo_paint(cr);
 
 	cairo_destroy(cr);

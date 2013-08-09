@@ -30,7 +30,7 @@
 /* surfaces are referenced, should be released with "cairo_surface_destroy" */
 cairo_surface_t *get_image(const char *path);
 cairo_surface_t *get_image_part(const char *path, int x, int y, int w, int h);
-void clean_image_cache();
+void clean_image_cache(int);
 
 /**************************************************************************
   Drag'n'drop
