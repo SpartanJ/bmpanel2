@@ -366,7 +366,8 @@ static void draw_task(struct taskbar_task *task, struct taskbar_widget *tw,
 	xx += iconw;
 
 	/* text */
-	draw_text(cr, layout, font, task->name.buf, xx, 0, textw, height, 1);
+	if ( !task->pinned )
+		draw_text(cr, layout, font, task->name.buf, xx, 0, textw, height, 1);
 }
 
 static inline void activate_task(struct x_connection *c, struct taskbar_task *t)
@@ -529,6 +530,7 @@ static void draw(struct widget *w)
 		taskw = tw->theme.task_max_width;
 
 	int x = w->x;
+	int ttaskw;
 	int curtask = 0;
 	size_t i;
 
@@ -542,6 +544,26 @@ static void draw(struct widget *w)
 		/* last task width correction */
 		if (TASKS_NEED_CORRECTION && curtask == count-1)
 			taskw = (w->x + w->width) - x;
+
+		ttaskw = taskw;
+
+		int state = (t->win == tw->active) << 1;
+		int state_hl = state | (i == tw->highlighted);
+		struct taskbar_theme *theme = &tw->theme;
+		struct triple_image *tbt;
+		if (theme->states[state_hl].exists) {
+			tbt = &theme->states[state_hl].background;
+		} else {
+			tbt = &theme->states[state].background;
+		}
+
+		int leftw = image_width(tbt->left);
+		int rightw = image_width(tbt->right);
+
+		if ( t->pinned )
+		{
+			taskw = leftw + image_width(tw->theme.default_icon) + rightw;
+		}
 
 		/* save position for other events */
 		t->x = x;
@@ -562,7 +584,6 @@ static void draw(struct widget *w)
 					 icon_geometry, 4);
 		}
 
-
 		draw_task(t, tw, cr, w->panel->layout,
 			  x, taskw, t->win == tw->active, i == tw->highlighted);
 		x += taskw;
@@ -571,6 +592,8 @@ static void draw(struct widget *w)
 			x += image_width(tw->theme.separator);
 		}
 		curtask++;
+
+		taskw = ttaskw;
 	}
 }
 
@@ -668,6 +691,7 @@ static void button_click(struct widget *w, XButtonEvent *e)
 
 	int mbutton_use = check_mbutton_condition(w->panel, e->button, MBUTTON_USE);
 	int mbutton_kill = check_mbutton_condition(w->panel, e->button, MBUTTON_KILL);
+	int mbutton_pin = check_mbutton_condition(w->panel, e->button, MBUTTON_PIN);
 
 	if (e->type == ButtonRelease) {
 		if (mbutton_use) {
@@ -680,6 +704,11 @@ static void button_click(struct widget *w, XButtonEvent *e)
 		}
 		if (mbutton_kill)
 			close_task(c, t);
+
+		if (mbutton_pin){
+			t->pinned = t->pinned ? 0 : 1;
+			w->needs_expose = 1;
+		}
 	}
 }
 

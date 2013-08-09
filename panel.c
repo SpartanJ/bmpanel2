@@ -30,6 +30,8 @@ static unsigned int parse_mbutton_flag(const char *flag)
 		return MBUTTON_KILL;
 	else if (!strcmp(flag, "show-desktop"))
 		return MBUTTON_SHOW_DESKTOP;
+	else if (!strcmp(flag, "pin"))
+		return MBUTTON_PIN;
 	return 0;
 }
 

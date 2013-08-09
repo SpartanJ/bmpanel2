@@ -18,10 +18,11 @@
 #define MBUTTON_DRAG		(1<<1)
 #define MBUTTON_KILL		(1<<2)
 #define MBUTTON_SHOW_DESKTOP	(1<<3)
+#define MBUTTON_PIN		(1<<4)
 
 #define MBUTTON_1_DEFAULT	(MBUTTON_USE | MBUTTON_DRAG)
 #define MBUTTON_2_DEFAULT	(MBUTTON_KILL)
-#define MBUTTON_3_DEFAULT	0
+#define MBUTTON_3_DEFAULT	(MBUTTON_PIN)
 
 /**************************************************************************
   Image cache

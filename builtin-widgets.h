@@ -25,6 +25,7 @@ struct taskbar_task {
 	int geom_w;
 	int demands_attention;
 	int monitor; /* for multihead setups */
+	int pinned;
 
 	/* I'm using only one name source Atom and I'm watching it for
 	 * updates.
