@@ -1,0 +1,17 @@
+/CMakeFiles/
+/CMake/
+/usr/
+*.cmake
+/extra/py/scripts-2.7/
+/extra/py/lib/
+Makefile
+/man/CMakeFiles/
+/CMakeCache.txt
+/bmpanel2
+/bmpanel2.config
+/bmpanel2.creator
+/bmpanel2.creator.user
+/bmpanel2.files
+/bmpanel2.includes
+/config.h
+/install_manifest.txt
