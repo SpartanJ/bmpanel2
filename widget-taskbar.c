@@ -121,6 +121,7 @@ static int parse_taskbar_theme(struct taskbar_theme *tt,
 
 	tt->separator = parse_image_part_named("separator", e, tree, 0);
 	tt->task_max_width = parse_int("task_max_width", e, 0);
+	tt->default_pinned = parse_bool( "default_pinned", e );
 
 	return 0;
 
@@ -240,6 +241,8 @@ static void add_task(struct widget *w, struct x_connection *c, Window win)
 	else
 		t.icon = 0;
 	t.desktop = x_get_window_desktop(c, win);
+
+	t.pinned = tw->theme.default_pinned;
 
 	int i = find_last_task_by_desktop(tw, t.desktop);
 	if (i == -1)

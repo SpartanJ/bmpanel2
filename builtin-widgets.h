@@ -45,6 +45,7 @@ struct taskbar_theme {
 	struct taskbar_state states[4];
 	cairo_surface_t *default_icon;
 	int task_max_width;
+	int default_pinned; /* bool */
 
 	cairo_surface_t *separator;
 };
