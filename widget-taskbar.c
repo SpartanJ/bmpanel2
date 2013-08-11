@@ -557,8 +557,8 @@ static void draw(struct widget *w)
 
 	// To calculate the default task width we don't take account the pinned tabs width
 	// Avoid division by zero when there's only one task in the taskbar and is pinned
-	if ( count == 1 && pinnedc == 1 )
-		pinnedc = 0;
+	if ( count == pinnedc )
+		count = 1;
 
 	int taskw = (w->width - sepspace - pinnedtw) / ( count - pinnedc );
 	if (tw->theme.task_max_width && taskw > tw->theme.task_max_width)
