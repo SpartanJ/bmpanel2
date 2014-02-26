@@ -536,7 +536,7 @@ static void draw(struct widget *w)
 	for (i = 0; i < tw->tasks_n; ++i) {
 		t = &tw->tasks[i];
 
-		if ( t->pinned ) {
+		if ( is_task_visible(w, t) && t->pinned ) {
 			int state = (t->win == tw->active) << 1;
 			int state_hl = state | (i == tw->highlighted);
 			struct triple_image *tbt;
