@@ -1,0 +1,127 @@
+theme
+	name Transpy Pinned Retina
+	author SpartanJ <spartanj@gmail.com>
+
+panel
+	position bottom
+	background bg.png
+	transparent
+
+desktop_switcher
+	paint_replace
+	idle
+		left_corner lblack_l.png
+		left lblack_t.png
+		center lblack_t.png
+		right lblack_t.png
+		right_corner lblack_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			offset 0 1
+	pressed
+		left_corner black_l.png
+		left black_t.png
+		center black_t.png
+		right black_t.png
+		right_corner black_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			offset 0 1
+
+pager
+	idle
+		border 57 57 57
+		fill 57 57 57
+		inactive_window_border 70 70 70
+		inactive_window_fill 18 18 18
+		active_window_border 70 70 70
+		active_window_fill 18 18 18
+		font Bitstream Vera Sans 8
+			color 255 255 255
+			offset 0 7
+			align right
+			shadow_offset 1 1
+			shadow_color 0 0 0
+
+	pressed
+		border 32 32 32
+		fill 32 32 32
+		inactive_window_border 110 110 110
+		inactive_window_fill 43 43 43
+		active_window_border 190 190 190
+		active_window_fill 0 0 0
+
+	height 46
+	
+	desktop_spacing 1
+
+empty 3
+
+launchbar
+	icon_size 48 48
+
+empty 3
+
+taskbar
+	paint_replace
+	idle
+		left lblack_l.png
+		center lblack_t.png
+		right lblack_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			align left
+			offset 10 1
+
+	idle_highlight
+		left lhblack_l.png
+		center lhblack_t.png
+		right lhblack_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			align left
+			offset 10 1
+	
+	pressed
+		left black_l.png
+		center black_t.png
+		right black_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			align left
+			offset 10 1
+
+	pressed_highlight
+		left lhblack_l.png
+		center lhblack_t.png
+		right lhblack_r.png
+		font Bitstream Vera Sans 16
+			color 255 255 255
+			align left
+			offset 10 1
+	
+	default_icon default_icon.png
+	
+	task_max_width 330
+	
+	default_pinned
+
+empty 3
+
+systray
+	icon_size 48 48
+		offset 0 1
+
+empty 3
+
+clock
+	paint_replace
+	background
+		center bg.png
+
+	font Bitstream Vera Sans bold 18
+		color 255 255 255
+		offset 0 1
+		align center
+	
+	time_format %H:%M
