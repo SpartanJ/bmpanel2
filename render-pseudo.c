@@ -73,7 +73,7 @@ static void blit(struct panel *p, int x, int y, unsigned int w, unsigned int h)
 
 	/* draw wallpaper or clear buffer */
 	if (pr->wallpaper) {
-		blit_image_ex(pr->wallpaper, pr->buf_cr, x, p->y + y,
+		blit_image_ex(pr->wallpaper, pr->buf_cr, p->x + x, p->y + y,
 			      w, h, x, y);
 	} else {
 		cairo_save(pr->buf_cr);
