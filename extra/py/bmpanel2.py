@@ -141,7 +141,7 @@ class ConfigNode:
 		for c in self.children:
 			if c.name == item:
 				return c
-		raise KeyError, item
+		raise KeyError
 
 #----------------------------------------------------------------------
 # ConfigFormat
