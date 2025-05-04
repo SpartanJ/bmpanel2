@@ -872,8 +872,8 @@ static int process_events(struct panel *p)
 			break;
 
 		default:
-			XWARNING("Unknown XEvent (type: %d, win: %d)",
-				 e.type, e.xany.window);
+			/*XWARNING("Unknown XEvent (type: %d, win: %d)",
+				 e.type, e.xany.window);*/
 			break;
 		}
 	}

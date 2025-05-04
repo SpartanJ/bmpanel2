@@ -15,3 +15,4 @@ Makefile
 /bmpanel2.includes
 /config.h
 /install_manifest.txt
+/.qtc_clangd

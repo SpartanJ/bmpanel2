@@ -1,0 +1,41 @@
+{
+  "bmpanel2": {
+    "build": [
+      {
+        "args": "-DCMAKE_EXPORT_COMPILE_COMMANDS=1 CMakeLists.txt",
+        "command": "cmake",
+        "working_dir": ""
+      },
+      {
+        "args": "-j${nproc}",
+        "command": "make",
+        "working_dir": ""
+      }
+    ],
+    "build_types": [],
+    "clean": [
+      {
+        "args": "",
+        "command": "",
+        "working_dir": ""
+      }
+    ],
+    "config": {
+      "clear_sys_env": false
+    },
+    "os": [],
+    "output_parser": {
+      "config": {
+        "relative_file_paths": true
+      }
+    },
+    "run": [
+      {
+        "args": "",
+        "command": "${project_root}/bmpanel2",
+        "name": "bmpanel2",
+        "working_dir": ""
+      }
+    ]
+  }
+}
